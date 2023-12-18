@@ -10,12 +10,12 @@ public interface HouseInterface {
 
     House create(House house);
 
-    ResponseEntity<ResponseError> delete(String id);
+    ResponseEntity<House> delete(String id);
 
-    ResponseEntity update(House house, String id);
+    ResponseEntity<House> update(House house, String id);
 
     List<House> retrieveHouses();
 
-    ResponseEntity retrieveHouseById(String id);
+    ResponseEntity<House> retrieveHouseById(String id);
 
 }

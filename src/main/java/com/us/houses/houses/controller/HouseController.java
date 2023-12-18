@@ -23,7 +23,7 @@ public class HouseController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity retrieveHouseById(@PathVariable String id){
+    private ResponseEntity<House> retrieveHouseById(@PathVariable String id){
         return houseInterface.retrieveHouseById(id);
     }
 
@@ -33,12 +33,12 @@ public class HouseController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity updateHouse(@RequestBody House house,  @PathVariable String id) {
+    private ResponseEntity<House> updateHouse(@RequestBody House house,  @PathVariable String id) {
         return houseInterface.update(house, id);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteHouse(@PathVariable String id){
+    private ResponseEntity<House> deleteHouse(@PathVariable String id){
         return houseInterface.delete(id);
     }
 }

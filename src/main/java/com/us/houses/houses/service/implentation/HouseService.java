@@ -24,22 +24,22 @@ public class HouseService implements HouseInterface {
     }
 
     @Override
-    public ResponseEntity delete(String id) {
+    public ResponseEntity<House> delete(String id) {
         if (houseRepository.findById(id).isPresent()) {
             houseRepository.deleteById(id);
-            return new ResponseEntity((new ResponseError("House : " + id + " delete successfully")), HttpStatus.OK);
+            return new ResponseEntity("House : " + id + " delete successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity((new ResponseError("Not found")), HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public ResponseEntity update(House house, String id) {
-        ResponseEntity validateIfExistHouse = retrieveHouseById(id);
+    public ResponseEntity<House> update(House house, String id) {
+        ResponseEntity<House> validateIfExistHouse = retrieveHouseById(id);
         if (validateIfExistHouse.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            return new ResponseEntity<>(new ResponseError("House : " + id + " not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity("House : " + id + " not found", HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(houseRepository.save(house), HttpStatus.OK);
+            return new ResponseEntity(houseRepository.save(house), HttpStatus.OK);
         }
     }
 
@@ -49,12 +49,12 @@ public class HouseService implements HouseInterface {
     }
 
     @Override
-    public ResponseEntity retrieveHouseById(String id) {
+    public ResponseEntity<House> retrieveHouseById(String id) {
         Optional<House> houseFounded = houseRepository.findById(id);
         if (houseFounded.isPresent()) {
-            return new ResponseEntity<>(houseFounded, HttpStatus.OK);
+            return new ResponseEntity<>(houseFounded.get(), HttpStatus.OK);
         } else {
-           return new ResponseEntity<>(new ResponseError("House : " + id + " not found"), HttpStatus.NOT_FOUND);
+           return new ResponseEntity("House : " + id + " not found", HttpStatus.NOT_FOUND);
         }
     }
 
