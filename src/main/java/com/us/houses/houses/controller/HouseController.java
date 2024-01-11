@@ -1,9 +1,7 @@
 package com.us.houses.houses.controller;
 
 import com.us.houses.houses.model.House;
-import com.us.houses.houses.model.ResponseError;
 import com.us.houses.houses.service.HouseInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +12,19 @@ import java.util.List;
 @RequestMapping("/v1/houses")
 public class HouseController {
 
-    @Autowired
-    private HouseInterface houseInterface;
+    private final HouseInterface houseInterface;
+
+    public HouseController(HouseInterface houseInterface) {
+        this.houseInterface = houseInterface;
+    }
 
     @GetMapping("/all")
-    private List<House> retrieveListOfHouses(){
+    private ResponseEntity<List<House>> retrieveListOfHouses() {
         return houseInterface.retrieveHouses();
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<House> retrieveHouseById(@PathVariable String id){
+    private ResponseEntity<House> retrieveHouseById(@PathVariable String id) {
         return houseInterface.retrieveHouseById(id);
     }
 
@@ -38,7 +39,7 @@ public class HouseController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<House> deleteHouse(@PathVariable String id){
+    private ResponseEntity<String> deleteHouse(@PathVariable String id) {
         return houseInterface.delete(id);
     }
 }

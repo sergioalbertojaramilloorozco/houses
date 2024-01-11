@@ -24,12 +24,12 @@ public class HouseService implements HouseInterface {
     }
 
     @Override
-    public ResponseEntity<House> delete(String id) {
+    public ResponseEntity<String> delete(String id) {
         if (houseRepository.findById(id).isPresent()) {
             houseRepository.deleteById(id);
-            return new ResponseEntity("House : " + id + " delete successfully", HttpStatus.OK);
+            return ResponseEntity.ok("House was deleted for id " + id);
         } else {
-            return new ResponseEntity((new ResponseError("Not found")), HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -37,25 +37,21 @@ public class HouseService implements HouseInterface {
     public ResponseEntity<House> update(House house, String id) {
         ResponseEntity<House> validateIfExistHouse = retrieveHouseById(id);
         if (validateIfExistHouse.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            return new ResponseEntity("House : " + id + " not found", HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         } else {
-            return new ResponseEntity(houseRepository.save(house), HttpStatus.OK);
+            return ResponseEntity.ok(houseRepository.save(house));
         }
     }
 
     @Override
-    public List<House> retrieveHouses() {
-        return houseRepository.findAll();
+    public ResponseEntity<List<House>> retrieveHouses() {
+        return ResponseEntity.ok(houseRepository.findAll());
     }
 
     @Override
     public ResponseEntity<House> retrieveHouseById(String id) {
-        Optional<House> houseFounded = houseRepository.findById(id);
-        if (houseFounded.isPresent()) {
-            return new ResponseEntity<>(houseFounded.get(), HttpStatus.OK);
-        } else {
-           return new ResponseEntity("House : " + id + " not found", HttpStatus.NOT_FOUND);
-        }
+        Optional<House> houseFound = houseRepository.findById(id);
+        return houseFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private House validateIfSomethingIsWrong(House house) {
